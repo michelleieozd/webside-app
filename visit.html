@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visit · Meridian Art Museum</title>
+  <style>
+    :root {
+      --ink: #1a1a1a;
+      --muted: #6b6b6b;
+      --line: #e3e0da;
+      --paper: #faf8f4;
+      --accent: #8a5a3b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .wrap {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .narrow { max-width: 760px; }
+
+    /* ---------- header ---------- */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(250, 248, 244, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .brand {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-links a { color: var(--muted); transition: color 0.2s; }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--ink); }
+
+    /* ---------- page head ---------- */
+    .page-head {
+      padding: 88px 0 64px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .page-head h1 {
+      font-size: clamp(30px, 5vw, 48px);
+      line-height: 1.15;
+      font-weight: 400;
+      max-width: 18em;
+    }
+
+    .page-head p {
+      margin-top: 22px;
+      max-width: 36em;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    section { padding: 72px 0; }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+    }
+
+    .section-head h2 {
+      font-size: 26px;
+      font-weight: 400;
+    }
+
+    .section-head span {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .panel {
+      background: #fff;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    /* ---------- hours ---------- */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    td.day { width: 40%; }
+    td.note { color: var(--muted); }
+    tr:last-child td { border-bottom: none; }
+
+    /* ---------- tickets ---------- */
+    .ticket-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+    }
+
+    .ticket {
+      border: 1px solid var(--line);
+      background: var(--paper);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ticket.featured {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+    }
+
+    .ticket .kind {
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .ticket.featured .kind { color: #d8b08c; }
+
+    .ticket .price {
+      margin: 14px 0 12px;
+      font-size: 36px;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+    }
+
+    .ticket .desc {
+      font-size: 14px;
+      color: var(--muted);
+      flex: 1;
+    }
+
+    .ticket.featured .desc { color: #cfcac2; }
+
+    .ticket .cta {
+      margin-top: 22px;
+      padding: 11px 0;
+      text-align: center;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      border: 1px solid currentColor;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .ticket .cta:hover { background: var(--ink); color: var(--paper); }
+    .ticket.featured .cta:hover { background: var(--paper); color: var(--ink); }
+
+    /* ---------- map placeholder ---------- */
+    .map {
+      aspect-ratio: 21 / 9;
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.14) 0 1px, transparent 1px 48px),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.14) 0 1px, transparent 1px 48px),
+        linear-gradient(135deg, #2f3b4c 0%, #566a82 100%);
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .map span {
+      color: #fff;
+      font-size: 13px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+
+    .route-grid {
+      margin-top: 32px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px;
+    }
+
+    .route h4 {
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .route p { font-size: 15px; color: var(--muted); }
+
+    /* ---------- rules / faq ---------- */
+    .faq details {
+      border-bottom: 1px solid var(--line);
+      padding: 18px 0;
+    }
+
+    .faq summary {
+      cursor: pointer;
+      font-size: 16px;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .faq summary::-webkit-details-marker { display: none; }
+
+    .faq summary::after {
+      content: "+";
+      color: var(--accent);
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .faq details[open] summary::after { content: "–"; }
+
+    .faq p {
+      margin-top: 12px;
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 54em;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 44px;
+      padding: 13px 26px;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      border: 1px solid var(--ink);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .back:hover { background: var(--ink); color: var(--paper); }
+
+    footer {
+      padding: 48px 0;
+      font-size: 13px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    .foot {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 640px) {
+      .nav { height: 62px; }
+      .nav-links { gap: 18px; font-size: 13px; }
+      .page-head { padding: 60px 0 48px; }
+      section { padding: 56px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="index.html">Meridian</a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="index.html#exhibitions">Exhibitions</a>
+        <a class="active" href="visit.html">Visit</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-head">
+      <div class="wrap">
+        <p class="eyebrow">Visitor Information</p>
+        <h1>Everything you need before walking through the door.</h1>
+        <p>
+          Tickets are sold at the entrance and online. Timed entry applies on
+          weekends between 10:00 and 14:00; at all other times you can arrive
+          whenever suits you.
+        </p>
+      </div>
+    </div>
+
+    <section>
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Opening Hours</h2>
+          <span>Last entry 45 minutes before closing</span>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Day</th>
+              <th>Hours</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="day">Monday</td>
+              <td>Closed</td>
+              <td class="note">Collection care day</td>
+            </tr>
+            <tr>
+              <td class="day">Tuesday – Friday</td>
+              <td>10:00 – 18:00</td>
+              <td class="note">Quietest before noon</td>
+            </tr>
+            <tr>
+              <td class="day">Saturday</td>
+              <td>09:00 – 20:00</td>
+              <td class="note">Timed entry until 14:00</td>
+            </tr>
+            <tr>
+              <td class="day">Sunday</td>
+              <td>09:00 – 20:00</td>
+              <td class="note">Free entry on first Sunday</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Tickets</h2>
+          <span>Valid all day, re-entry allowed</span>
+        </div>
+
+        <div class="ticket-grid">
+          <div class="ticket">
+            <p class="kind">Standard</p>
+            <p class="price">$16</p>
+            <p class="desc">
+              Full access to all nine galleries and the current exhibitions.
+            </p>
+            <a class="cta" href="#">Book Online</a>
+          </div>
+
+          <div class="ticket featured">
+            <p class="kind">Annual Pass</p>
+            <p class="price">$48</p>
+            <p class="desc">
+              Unlimited entry for twelve months, two guest tickets, and early
+              access to exhibition openings.
+            </p>
+            <a class="cta" href="#">Become a Member</a>
+          </div>
+
+          <div class="ticket">
+            <p class="kind">Student &amp; Senior</p>
+            <p class="price">$9</p>
+            <p class="desc">
+              Please bring a valid student card or proof of age to the entrance.
+            </p>
+            <a class="cta" href="#">Book Online</a>
+          </div>
+
+          <div class="ticket">
+            <p class="kind">Under 12</p>
+            <p class="price">Free</p>
+            <p class="desc">
+              No ticket required. Children must be accompanied by an adult.
+            </p>
+            <a class="cta" href="#">Family Guide</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Getting Here</h2>
+          <span>18 Harbour Lane, Rivermouth, RM4 2QL</span>
+        </div>
+
+        <div class="map"><span>Harbour Lane · North Bank</span></div>
+
+        <div class="route-grid">
+          <div class="route">
+            <h4>Metro</h4>
+            <p>
+              Line 2 to Harbour Lane, exit B. The museum is a three-minute walk
+              north along the water.
+            </p>
+          </div>
+          <div class="route">
+            <h4>Bus</h4>
+            <p>
+              Routes 14, 27 and 60 stop directly outside the entrance. Route 60
+              runs every ten minutes on weekends.
+            </p>
+          </div>
+          <div class="route">
+            <h4>By Car</h4>
+            <p>
+              Limited paid parking on Mill Street, two blocks east. There is no
+              on-site car park.
+            </p>
+          </div>
+          <div class="route">
+            <h4>By Bicycle</h4>
+            <p>
+              Covered racks sit beside the north wing. A public bike-share dock is
+              at the corner of Harbour Lane and Quay Road.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="wrap narrow">
+        <div class="section-head">
+          <h2>Good to Know</h2>
+        </div>
+
+        <div class="faq">
+          <details open>
+            <summary>Can I take photographs?</summary>
+            <p>
+              Yes, without flash or tripod, in all permanent collection galleries.
+              Photography is not permitted in Gallery Two, where loaned works are
+              shown under lender restrictions.
+            </p>
+          </details>
+
+          <details>
+            <summary>Is the museum accessible?</summary>
+            <p>
+              All galleries are step-free and reachable by lift. Wheelchairs and
+              folding stools can be borrowed free of charge at the cloakroom.
+              Assistance dogs are welcome throughout the building.
+            </p>
+          </details>
+
+          <details>
+            <summary>Where can I leave bags and coats?</summary>
+            <p>
+              The cloakroom is to the left of the entrance and is free to use.
+              Large backpacks and luggage must be checked in before entering the
+              galleries.
+            </p>
+          </details>
+
+          <details>
+            <summary>Is there somewhere to eat?</summary>
+            <p>
+              The ground-floor café serves coffee and a short lunch menu until
+              16:00. The courtyard is open in dry weather and you are welcome to
+              bring your own food there.
+            </p>
+          </details>
+
+          <details>
+            <summary>Do you offer guided tours?</summary>
+            <p>
+              Free thirty-minute introductions begin at 11:00 and 15:00 from the
+              main hall, no booking needed. Group tours of ten or more should be
+              arranged two weeks in advance.
+            </p>
+          </details>
+        </div>
+
+        <a class="back" href="index.html">Back to Home</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <span>&copy; 2026 Meridian Art Museum</span>
+      <span>hello@meridian-museum.example · +1 555 0188</span>
+    </div>
+  </footer>
+
+</body>
+</html>

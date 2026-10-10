@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About · Meridian Art Museum</title>
+  <style>
+    :root {
+      --ink: #1a1a1a;
+      --muted: #6b6b6b;
+      --line: #e3e0da;
+      --paper: #faf8f4;
+      --accent: #8a5a3b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .wrap {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .narrow { max-width: 720px; }
+
+    /* ---------- header ---------- */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(250, 248, 244, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .brand {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-links a { color: var(--muted); transition: color 0.2s; }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--ink); }
+
+    /* ---------- page head ---------- */
+    .page-head {
+      padding: 88px 0 64px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .page-head h1 {
+      font-size: clamp(30px, 5vw, 48px);
+      line-height: 1.15;
+      font-weight: 400;
+      max-width: 18em;
+    }
+
+    .page-head p {
+      margin-top: 22px;
+      max-width: 36em;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    /* ---------- content ---------- */
+    section { padding: 72px 0; }
+
+    .block + .block { margin-top: 52px; }
+
+    .block h2 {
+      font-size: 24px;
+      font-weight: 400;
+      margin-bottom: 16px;
+    }
+
+    .block p {
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .block p + p { margin-top: 14px; }
+
+    /* ---------- stats ---------- */
+    .stats {
+      background: #fff;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 36px;
+    }
+
+    .stat .num {
+      font-size: 40px;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      display: block;
+    }
+
+    .stat .label {
+      margin-top: 8px;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ---------- timeline ---------- */
+    .timeline { border-left: 1px solid var(--line); padding-left: 28px; }
+
+    .event { position: relative; padding-bottom: 32px; }
+    .event:last-child { padding-bottom: 0; }
+
+    .event::before {
+      content: "";
+      position: absolute;
+      left: -34px;
+      top: 9px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .event .year {
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+    }
+
+    .event h3 {
+      margin: 6px 0 6px;
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .event p { font-size: 15px; color: var(--muted); }
+
+    /* ---------- contact ---------- */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 36px;
+    }
+
+    .contact-block h4 {
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .contact-block p { font-size: 15px; color: var(--muted); }
+
+    .back {
+      display: inline-block;
+      margin-top: 44px;
+      padding: 13px 26px;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      border: 1px solid var(--ink);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .back:hover { background: var(--ink); color: var(--paper); }
+
+    /* ---------- footer ---------- */
+    footer {
+      padding: 48px 0;
+      font-size: 13px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    .foot {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 640px) {
+      .nav { height: 62px; }
+      .nav-links { gap: 20px; font-size: 13px; }
+      .page-head { padding: 60px 0 48px; }
+      section { padding: 56px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="index.html">Meridian</a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a class="active" href="about.html">About</a>
+        <a href="index.html#exhibitions">Exhibitions</a>
+        <a href="index.html#visit">Visit</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-head">
+      <div class="wrap">
+        <p class="eyebrow">About the Museum</p>
+        <h1>Built from a shipping warehouse, kept as a room for looking.</h1>
+        <p>
+          Meridian opened in 1974 in a disused grain warehouse on the north bank.
+          Half a century later the building still shows its original timber frame,
+          and the museum still runs on the same idea: fewer works, more room around
+          each one.
+        </p>
+      </div>
+    </div>
+
+    <section>
+      <div class="wrap narrow">
+        <div class="block">
+          <h2>Our Approach</h2>
+          <p>
+            We hang between forty and sixty works per gallery, roughly a third of
+            what the space could hold. Wall text is kept short and placed to the
+            side, so the first thing you meet is the work itself rather than a
+            paragraph about it.
+          </p>
+          <p>
+            Every exhibition is accompanied by an open study room where the research
+            files, loan correspondence and conservation notes are available to read.
+            Visitors are welcome to sit there as long as they like.
+          </p>
+        </div>
+
+        <div class="block">
+          <h2>The Building</h2>
+          <p>
+            The 1891 warehouse was converted by Aila Renner between 1971 and 1974.
+            Her plan left the timber columns in place and lit the galleries entirely
+            from above, through sawtooth roof glazing that faces north. On clear
+            days no artificial light is used before four in the afternoon.
+          </p>
+          <p>
+            A second wing was added in 2009, holding the print study room, a
+            150-seat lecture hall and the conservation studio.
+          </p>
+        </div>
+
+        <div class="block">
+          <h2>The Collection</h2>
+          <p>
+            Meridian collects in four areas: post-war painting, sculpture in wood
+            and stone, darkroom photography, and artists' moving image. Around 280
+            works are on view at any time, and the rest is accessible by appointment
+            through the study room.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="wrap">
+        <div class="stat-grid">
+          <div class="stat">
+            <span class="num">1974</span>
+            <span class="label">Year Opened</span>
+          </div>
+          <div class="stat">
+            <span class="num">4,200</span>
+            <span class="label">Works Held</span>
+          </div>
+          <div class="stat">
+            <span class="num">9</span>
+            <span class="label">Galleries</span>
+          </div>
+          <div class="stat">
+            <span class="num">112k</span>
+            <span class="label">Visitors A Year</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap narrow">
+        <div class="block">
+          <h2>A Short History</h2>
+          <div class="timeline">
+            <div class="event">
+              <p class="year">1971</p>
+              <h3>The warehouse is bought</h3>
+              <p>
+                A group of eleven artists and two shipping families acquire the
+                derelict grain store and commission its conversion.
+              </p>
+            </div>
+            <div class="event">
+              <p class="year">1974</p>
+              <h3>First galleries open</h3>
+              <p>
+                Three rooms open to the public with a founding gift of 310 works,
+                most of them by artists living within the region.
+              </p>
+            </div>
+            <div class="event">
+              <p class="year">1996</p>
+              <h3>Photography archive arrives</h3>
+              <p>
+                The Harbour Lane negative archive, some 18,000 sheets, is
+                transferred to the museum and placed in cold storage.
+              </p>
+            </div>
+            <div class="event">
+              <p class="year">2009</p>
+              <h3>North wing completed</h3>
+              <p>
+                The study room, lecture hall and conservation studio open, allowing
+                the collection to be shown and researched in the same building.
+              </p>
+            </div>
+            <div class="event">
+              <p class="year">2024</p>
+              <h3>Fiftieth anniversary</h3>
+              <p>
+                A year-long rehang draws on works that had not left storage since
+                the founding gift.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="wrap">
+        <div class="contact-grid">
+          <div class="contact-block">
+            <h4>General Enquiries</h4>
+            <p>hello@meridian-museum.example<br />+1 555 0188</p>
+          </div>
+          <div class="contact-block">
+            <h4>Study Room</h4>
+            <p>By appointment, Tue – Fri<br />study@meridian-museum.example</p>
+          </div>
+          <div class="contact-block">
+            <h4>Press</h4>
+            <p>press@meridian-museum.example<br />+1 555 0190</p>
+          </div>
+          <div class="contact-block">
+            <h4>Address</h4>
+            <p>18 Harbour Lane<br />Rivermouth, RM4 2QL</p>
+          </div>
+        </div>
+        <a class="back" href="index.html">Back to Home</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <span>&copy; 2026 Meridian Art Museum</span>
+      <span>hello@meridian-museum.example · +1 555 0188</span>
+    </div>
+  </footer>
+
+</body>
+</html>

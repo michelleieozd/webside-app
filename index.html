@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flint &amp; Ember — Coffee Roasters</title>
+  <style>
+    :root {
+      --bg: #14100d;
+      --bg-soft: #1e1915;
+      --cream: #f3ece2;
+      --muted: #a39687;
+      --ember: #e2703a;
+      --line: #322a24;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      background: var(--bg);
+      color: var(--cream);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .sans {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ---------- nav ---------- */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(20, 16, 13, 0.88);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
+
+    .brand {
+      font-size: 19px;
+      letter-spacing: 0.04em;
+    }
+
+    .brand em { color: var(--ember); font-style: normal; }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      color: var(--muted);
+    }
+
+    .nav-links a:hover { color: var(--ember); }
+
+    /* ---------- hero ---------- */
+    .hero {
+      padding: 110px 0 96px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -180px;
+      top: -120px;
+      width: 560px;
+      height: 560px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, rgba(226, 112, 58, 0.34), transparent 68%);
+      pointer-events: none;
+    }
+
+    .tagline {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--ember);
+      margin-bottom: 26px;
+    }
+
+    .hero h1 {
+      font-size: clamp(42px, 8vw, 84px);
+      line-height: 1.02;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      max-width: 13em;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--ember);
+    }
+
+    .hero-sub {
+      margin-top: 28px;
+      max-width: 34em;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .hero-actions {
+      margin-top: 40px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      display: inline-block;
+      padding: 14px 30px;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      transition: background 0.22s, color 0.22s, border-color 0.22s;
+    }
+
+    .btn-fill {
+      background: var(--ember);
+      color: #1a120c;
+      border: 1px solid var(--ember);
+    }
+
+    .btn-fill:hover { background: transparent; color: var(--ember); }
+
+    .btn-line {
+      border: 1px solid var(--line);
+      color: var(--cream);
+    }
+
+    .btn-line:hover { border-color: var(--cream); }
+
+    /* ---------- marquee strip ---------- */
+    .strip {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--bg-soft);
+      padding: 18px 0;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .strip .wrap {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* ---------- sections ---------- */
+    section { padding: 92px 0; }
+
+    .head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+
+    .head h2 {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+
+    .head p {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      max-width: 24em;
+    }
+
+    /* ---------- beans ---------- */
+    .beans {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 22px;
+    }
+
+    .bean {
+      background: var(--bg-soft);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.22s, transform 0.22s;
+    }
+
+    .bean:hover { border-color: var(--ember); transform: translateY(-5px); }
+
+    .bag {
+      height: 170px;
+      display: flex;
+      align-items: flex-end;
+      padding: 18px;
+    }
+
+    .bag-1 { background: linear-gradient(160deg, #6d3b22 0%, #c2653a 100%); }
+    .bag-2 { background: linear-gradient(160deg, #294038 0%, #74a089 100%); }
+    .bag-3 { background: linear-gradient(160deg, #3c2c48 0%, #8c6e9e 100%); }
+    .bag-4 { background: linear-gradient(160deg, #4a3c1f 0%, #b39b52 100%); }
+
+    .roast {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      background: rgba(20, 16, 13, 0.55);
+      padding: 6px 12px;
+      border-radius: 999px;
+    }
+
+    .bean-body { padding: 22px; flex: 1; display: flex; flex-direction: column; }
+
+    .origin {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ember);
+    }
+
+    .bean-body h3 {
+      margin: 10px 0 10px;
+      font-size: 22px;
+      font-weight: 400;
+    }
+
+    .notes {
+      font-size: 15px;
+      color: var(--muted);
+      flex: 1;
+    }
+
+    .bean-foot {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 13px;
+    }
+
+    .price { font-size: 17px; }
+    .buy { color: var(--ember); letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; }
+
+    /* ---------- process ---------- */
+    .process { background: var(--bg-soft); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 40px;
+    }
+
+    .step .n {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      color: var(--ember);
+    }
+
+    .step h3 {
+      margin: 14px 0 10px;
+      font-size: 21px;
+      font-weight: 400;
+    }
+
+    .step p { font-size: 15px; color: var(--muted); }
+
+    /* ---------- subscribe ---------- */
+    .sub-box {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 54px 40px;
+      text-align: center;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(226, 112, 58, 0.16), transparent 62%),
+        var(--bg-soft);
+    }
+
+    .sub-box h2 {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 400;
+      max-width: 20em;
+      margin: 0 auto;
+    }
+
+    .sub-box p {
+      margin: 20px auto 0;
+      max-width: 32em;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .form {
+      margin: 34px auto 0;
+      display: flex;
+      gap: 10px;
+      max-width: 440px;
+      flex-wrap: wrap;
+    }
+
+    .form input {
+      flex: 1;
+      min-width: 200px;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      color: var(--cream);
+      padding: 14px 18px;
+      border-radius: 999px;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form input:focus { border-color: var(--ember); }
+    .form input::placeholder { color: #6f6356; }
+
+    .form button {
+      cursor: pointer;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      padding: 14px 28px;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      background: var(--ember);
+      color: #1a120c;
+      border: 1px solid var(--ember);
+      transition: background 0.22s, color 0.22s;
+    }
+
+    .form button:hover { background: transparent; color: var(--ember); }
+
+    .fineprint {
+      margin-top: 16px;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 12px;
+      color: #6f6356;
+    }
+
+    /* ---------- visit ---------- */
+    .cafe {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 36px;
+    }
+
+    .cafe h4 {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ember);
+      margin-bottom: 12px;
+    }
+
+    .cafe p { font-size: 15px; color: var(--muted); }
+    .cafe strong { color: var(--cream); font-weight: normal; }
+
+    /* ---------- footer ---------- */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 42px 0;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 12px;
+      color: #6f6356;
+    }
+
+    .foot {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 640px) {
+      .nav { height: 60px; }
+      .nav-links { gap: 16px; font-size: 11px; }
+      .hero { padding: 72px 0 64px; }
+      section { padding: 64px 0; }
+      .sub-box { padding: 40px 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="#top">Flint &amp; <em>Ember</em></a>
+      <nav class="nav-links">
+        <a href="#beans">Beans</a>
+        <a href="#process">Roasting</a>
+        <a href="#subscribe">Subscription</a>
+        <a href="#cafe">Café</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <div class="hero">
+      <div class="wrap">
+        <p class="tagline">Small-batch roastery · Est. 2016</p>
+        <h1>We roast in ten-kilo batches and <em>ship within a day</em>.</h1>
+        <p class="hero-sub">
+          Four single origins and one house blend, roasted on a 1962 drum machine in
+          a converted bakery on Kiln Street. Nothing sits on a shelf longer than a
+          week.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-fill" href="#beans">Shop Beans</a>
+          <a class="btn btn-line" href="#process">How We Roast</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="strip">
+      <div class="wrap">
+        <span>Roasted Tuesdays &amp; Fridays</span>
+        <span>Free shipping over $40</span>
+        <span>Direct trade, 7 farms</span>
+        <span>Compostable packaging</span>
+      </div>
+    </div>
+
+    <section id="beans">
+      <div class="wrap">
+        <div class="head">
+          <h2>This Week's Roast</h2>
+          <p>Prices are per 250g bag. Whole bean by default — tell us your brewer and we grind to match.</p>
+        </div>
+
+        <div class="beans">
+          <article class="bean">
+            <div class="bag bag-1"><span class="roast">Medium</span></div>
+            <div class="bean-body">
+              <p class="origin">Colombia · Huila</p>
+              <h3>Kiln Street House</h3>
+              <p class="notes">
+                Our everyday blend. Baked plum, cocoa nib and a long caramel finish.
+                Forgiving in any brewer.
+              </p>
+              <div class="bean-foot">
+                <span class="price">$17</span>
+                <a class="buy" href="#">Add to bag</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="bean">
+            <div class="bag bag-2"><span class="roast">Light</span></div>
+            <div class="bean-body">
+              <p class="origin">Ethiopia · Guji</p>
+              <h3>Shakiso Washed</h3>
+              <p class="notes">
+                Bergamot, white peach and jasmine. Bright and tea-like; best as
+                pour-over at 94°C.
+              </p>
+              <div class="bean-foot">
+                <span class="price">$22</span>
+                <a class="buy" href="#">Add to bag</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="bean">
+            <div class="bag bag-3"><span class="roast">Light-Medium</span></div>
+            <div class="bean-body">
+              <p class="origin">Kenya · Nyeri</p>
+              <h3>Gatomboya AA</h3>
+              <p class="notes">
+                Blackcurrant and tomato leaf, with the sharp acidity Nyeri is known
+                for. Holds up well with milk.
+              </p>
+              <div class="bean-foot">
+                <span class="price">$24</span>
+                <a class="buy" href="#">Add to bag</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="bean">
+            <div class="bag bag-4"><span class="roast">Dark</span></div>
+            <div class="bean-body">
+              <p class="origin">Brazil · Cerrado</p>
+              <h3>Night Shift</h3>
+              <p class="notes">
+                Roasted long for espresso. Dark chocolate, walnut and brown sugar,
+                with very little acidity.
+              </p>
+              <div class="bean-foot">
+                <span class="price">$18</span>
+                <a class="buy" href="#">Add to bag</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="process" id="process">
+      <div class="wrap">
+        <div class="head">
+          <h2>Four Steps, No Shortcuts</h2>
+          <p>Every batch is cupped before it leaves the building. If it misses, it does not ship.</p>
+        </div>
+
+        <div class="steps">
+          <div class="step">
+            <p class="n">01</p>
+            <h3>Sourcing</h3>
+            <p>
+              We buy from seven farms we have visited, at prices agreed a season
+              ahead so growers are not exposed to the spot market.
+            </p>
+          </div>
+          <div class="step">
+            <p class="n">02</p>
+            <h3>Profiling</h3>
+            <p>
+              Each new lot gets six test roasts across a range of curves. We keep
+              the one that tastes most like the coffee, not most like us.
+            </p>
+          </div>
+          <div class="step">
+            <p class="n">03</p>
+            <h3>Roasting</h3>
+            <p>
+              Ten kilos at a time on a restored 1962 drum roaster, logged by hand.
+              Two roast days a week, Tuesday and Friday.
+            </p>
+          </div>
+          <div class="step">
+            <p class="n">04</p>
+            <h3>Resting &amp; Shipping</h3>
+            <p>
+              Beans rest four days to degas, then ship the same day they are bagged.
+              The roast date is stamped on every bag.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="subscribe">
+      <div class="wrap">
+        <div class="sub-box">
+          <h2>Coffee on your doorstep, every other Friday.</h2>
+          <p>
+            Pick a size, pick a grind, and we rotate through the current lots so you
+            are never drinking the same bag twice. Pause or cancel any time.
+          </p>
+          <form class="form" onsubmit="return false;">
+            <input type="email" placeholder="your@email.com" aria-label="Email address" />
+            <button type="submit">Start</button>
+          </form>
+          <p class="fineprint">No charge today. We email you the first lot before billing.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="cafe">
+      <div class="wrap">
+        <div class="head">
+          <h2>The Kiln Street Bar</h2>
+          <p>Six seats, one espresso machine, and whatever came off the roaster that morning.</p>
+        </div>
+
+        <div class="cafe">
+          <div>
+            <h4>Address</h4>
+            <p><strong>42 Kiln Street</strong><br />Eastgate, Bellweather<br />BW2 7HD</p>
+          </div>
+          <div>
+            <h4>Hours</h4>
+            <p>Mon – Fri · 07:30 – 15:00<br />Sat · 08:30 – 16:00<br />Sun · Closed</p>
+          </div>
+          <div>
+            <h4>Cupping Table</h4>
+            <p>Open tasting every Friday at 10:00. Free, no booking, six seats first come.</p>
+          </div>
+          <div>
+            <h4>Wholesale</h4>
+            <p>Supplying eleven cafés in the region.<br />wholesale@flintember.example</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <span>&copy; 2026 Flint &amp; Ember Coffee Roasters</span>
+      <span>hello@flintember.example · +1 555 0244</span>
+    </div>
+  </footer>
+
+</body>
+</html>
